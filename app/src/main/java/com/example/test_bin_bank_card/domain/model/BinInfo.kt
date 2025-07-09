@@ -1,6 +1,7 @@
 package com.example.test_bin_bank_card.domain.model
 
 data class BinInfo(
+    val id: Int = 0,
     val number: NumberInfo?,
     val scheme: String?,
     val type: String?,

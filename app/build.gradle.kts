@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
 }
 
@@ -35,12 +34,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
+
+    buildFeatures{
+        viewBinding = true
     }
 }
 
 dependencies {
+    implementation (libs.logging.interceptor)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
