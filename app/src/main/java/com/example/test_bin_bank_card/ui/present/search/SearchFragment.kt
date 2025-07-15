@@ -10,8 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.test_bin_bank_card.databinding.FragmentSearchBinding
 import com.example.test_bin_bank_card.domain.model.BinInfo
-import com.example.test_bin_bank_card.ui.present.search.UiState
-import com.example.test_bin_bank_card.ui.viewmodel.ViewModel
+import com.example.test_bin_bank_card.ui.viewmodel.FragmentViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,16 +19,10 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding: FragmentSearchBinding get() = requireNotNull(_binding)
 
-    //  private var adapter: VacancyAdapter? = null
-    private val viewModel by viewModel<ViewModel>()
-    private var isClickAllowed = true
-    private var filterMenuItem: MenuItem? = null
-    private var isToastAllowed = true
+    private val viewModel by viewModel<FragmentViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
@@ -67,11 +60,11 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(binInfo: BinInfo?) = with(binding) {
-      //  bankName.text = "${binInfo?.bank?.name}"
-        countryInfo.text ="${binInfo?.country?.name}, ${binInfo?.country?.currency}\n${binInfo?.country?.latitude}\n${binInfo?.country?.longitude}"
-        bankName.text ="${binInfo?.bank?.name}" +
-                "\n city - ${binInfo?.bank?.city}" +
-                "\n number -${binInfo?.bank?.phone}"
+        //  bankName.text = "${binInfo?.bank?.name}"
+        countryInfo.text =
+            "${binInfo?.country?.name}, ${binInfo?.country?.currency}\n${binInfo?.country?.latitude}\n${binInfo?.country?.longitude}"
+        bankName.text =
+            "${binInfo?.bank?.name}" + "\n city - ${binInfo?.bank?.city}" + "\n number -${binInfo?.bank?.phone}"
         bankType.text = "${binInfo?.scheme}/${binInfo?.type}"
         countryName.text = binInfo?.country?.name
     }

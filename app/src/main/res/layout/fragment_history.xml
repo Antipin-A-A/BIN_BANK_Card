@@ -11,11 +11,12 @@
         tools:ignore="HardcodedText"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackList"
+        android:id="@+id/binkList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_view">
+        tools:listitem="@layout/item_adapter">
 
     </androidx.recyclerview.widget.RecyclerView>
 

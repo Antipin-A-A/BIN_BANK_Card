@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,25 +20,28 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class ViewModel(
+class FragmentViewModel(
     private val interactor: Interact
 ) : ViewModel() {
 
     private val _searchState = MutableStateFlow<UiState>(UiState.Loading)
- //   val searchState: StateFlow<UiState> = _searchState
+    //   val searchState: StateFlow<UiState> = _searchState
 
     var latestSearchText: String? = null
     private var searchJob: Job? = null
 
-    val mediatorStateFlow: StateFlow<UiState> = _searchState
-        .map { uiState ->
+
+    init {
+        getHistory()
+    }
+
+    val mediatorStateFlow: StateFlow<UiState> = _searchState.map { uiState ->
             when (uiState) {
                 is UiState.Loading -> uiState
                 is UiState.Content -> uiState
                 is UiState.Error -> uiState
             }
-        }
-        .stateIn(
+        }.stateIn(
             scope = CoroutineScope(Dispatchers.Main + SupervisorJob()),
             started = SharingStarted.Companion.Lazily,
             initialValue = UiState.Loading
@@ -49,9 +53,7 @@ class ViewModel(
         if (searchText.isNotEmpty()) {
             renderState(UiState.Loading)
             viewModelScope.launch {
-                interactor
-                    .searchBin(searchText)
-                    .collect { pair ->
+                interactor.searchBin(searchText).collect { pair ->
                         processResult(pair.first, pair.second)
                     }
             }
@@ -59,21 +61,12 @@ class ViewModel(
     }
 
     private fun processResult(foundTreks: BinInfo?, errorMessage: String?) {
-//        val binSearch = mutableListOf<BinInfo>()
-//        if (foundTreks != null) {
-//            binSearch.addAll(foundTreks)
-//        }
         when {
             errorMessage != null -> {
                 if (errorMessage == "${Object.ERROR_CONNECT}") {
                     renderState(UiState.Error(errorMessage))
                 }
-
             }
-
-//            binSearch.isEmpty() -> {
-//                renderState(UiState.Empty)
-//            }
 
             else -> {
                 renderState(UiState.Content(foundTreks))
@@ -83,6 +76,12 @@ class ViewModel(
                 )
             }
         }
+    }
+
+    fun getHistory(): Flow<List<BinInfo>> {
+        val history = interactor.getHistoryBin()
+        Log.i("LogHistory", " ${history.map { it -> it.size }} ")
+        return history
     }
 
     private fun renderState(state: UiState) {

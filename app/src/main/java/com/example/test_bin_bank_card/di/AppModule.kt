@@ -14,7 +14,7 @@ import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import com.example.test_bin_bank_card.ui.viewmodel.ViewModel
+import com.example.test_bin_bank_card.ui.viewmodel.FragmentViewModel
 
 val AppModule = module {
 
@@ -49,5 +49,5 @@ val AppModule = module {
 //            .build()
 //    }
 
-    viewModel<ViewModel> { ViewModel(interactor = get()) }
+    viewModel<FragmentViewModel> { FragmentViewModel(interactor = get()) }
 }
