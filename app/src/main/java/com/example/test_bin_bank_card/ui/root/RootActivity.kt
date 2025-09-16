@@ -22,21 +22,5 @@ class RootActivity : AppCompatActivity() {
 
         binding?.bottomNavigation?.setupWithNavController(navController)
 
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-//            when (destination.id) {
-//                R.id.detailsFragment,
-//                R.id.filterFragment,
-//                R.id.industryFragment,
-//                R.id.areasFilterFragment,
-//                R.id.countriesFragment,
-//                R.id.regionsFragment -> {
-//                    binding?.bottomNavigation?.isVisible = false
-//                }
-//
-//                else -> {
-//                    binding?.bottomNavigation?.isVisible = true
-//                }
-//            }
-//        }
     }
 }

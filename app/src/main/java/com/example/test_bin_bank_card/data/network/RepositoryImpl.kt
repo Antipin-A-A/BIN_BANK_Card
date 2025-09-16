@@ -13,6 +13,8 @@ import com.example.test_bin_bank_card.domain.model.BinInfo
 import com.example.test_bin_bank_card.utilit.Object.CONNECT_OK
 import com.example.test_bin_bank_card.utilit.Object.ERROR_CONNECT
 import com.example.test_bin_bank_card.utilit.Object.ERROR_FILE_NOT_FOUND
+import com.example.test_bin_bank_card.utilit.Object.SERVER_ERROR
+import com.example.test_bin_bank_card.utilit.Object.SERVER_ERROR_LIMIT
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -34,12 +36,19 @@ class RepositoryImpl(
                     val domainModel = Resource.Success(dto.toDomainModel())
                     emit(domainModel)
                 } else {
-                    Log.i("Log1", "null")
-                    emit(Resource.Error("Пустой ответ от сервера"))
+                    Log.i("LogReposit1", "null")
+                    emit(Resource.Error("An empty response from the server"))
                 }
             }
 
+            SERVER_ERROR_LIMIT -> {
+                emit(Resource.Error("Request limit exceeded, please try again later"))
+            }
+            SERVER_ERROR -> {
+                emit(Resource.Error(" Server error: incorrect data"))
+            }
             else -> {
+                Log.i("LogReposit-3", "${response.resultCode}")
                 emit(Resource.Error("$ERROR_FILE_NOT_FOUND"))
             }
         }

@@ -7,8 +7,11 @@ import com.example.test_bin_bank_card.data.dto.SearchRequest
 import com.example.test_bin_bank_card.utilit.Object.CONNECT_OK
 import com.example.test_bin_bank_card.utilit.Object.ERROR_CONNECT
 import com.example.test_bin_bank_card.utilit.Object.ERROR_FILE_NOT_FOUND
+import com.example.test_bin_bank_card.utilit.Object.SERVER_ERROR
+import com.example.test_bin_bank_card.utilit.Object.SERVER_ERROR_LIMIT
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import kotlin.apply
 
 class RetrofitNetworkClient(
@@ -26,8 +29,16 @@ class RetrofitNetworkClient(
                     data = binInfo
                 }
             } catch (e: Throwable) {
-                Log.e("Log2", "Network error", e)
-                Response().apply { resultCode = ERROR_FILE_NOT_FOUND }
+                return@withContext if (e is HttpException) {
+                    when (e.code()) {
+                        SERVER_ERROR -> Response().apply { resultCode = SERVER_ERROR }
+                        SERVER_ERROR_LIMIT -> Response().apply { resultCode = SERVER_ERROR_LIMIT }
+                        else -> {Response().apply { resultCode = ERROR_FILE_NOT_FOUND }}
+                    }
+                } else {
+                    Log.e("Log2", "Network error", e)
+                    Response().apply { resultCode = ERROR_FILE_NOT_FOUND }
+                }
             }
         }
     }

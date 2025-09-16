@@ -30,24 +30,9 @@ val AppModule = module {
 
     single<NetworkClient> { RetrofitNetworkClient(get(), get()) }
 
-//    factoryOf(::RepositoryImpl) {
-//        bind<RepositoryImpl>()
-//    }
     single<Repository> { RepositoryImpl(get(), get()) }
 
     single<Interact> { InteractImp(get()) }
-
-//    single<OkHttpClient> {
-//        val loggingInterceptor = HttpLoggingInterceptor().apply {
-//            level = HttpLoggingInterceptor.Level.BODY
-//        }
-//        OkHttpClient.Builder()
-//            .addInterceptor(loggingInterceptor)
-//            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
-//            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
-//            .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
-//            .build()
-//    }
 
     viewModel<FragmentViewModel> { FragmentViewModel(interactor = get()) }
 }
