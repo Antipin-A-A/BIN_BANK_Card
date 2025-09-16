@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.test_bin_bank_card.domain.api.Interact
 import com.example.test_bin_bank_card.domain.model.BinInfo
 import com.example.test_bin_bank_card.ui.present.search.UiState
-import com.example.test_bin_bank_card.utilit.Object
+import com.example.test_bin_bank_card.utilit.Object.ERROR_CONNECT
+import com.example.test_bin_bank_card.utilit.Object.SERVER_ERROR_LIMIT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +25,7 @@ class FragmentViewModel(
     private val interactor: Interact
 ) : ViewModel() {
 
-    private val _searchState = MutableStateFlow<UiState>(UiState.Loading)
+    private val _searchState = MutableStateFlow<UiState>(UiState.Empty)
     //   val searchState: StateFlow<UiState> = _searchState
 
     var latestSearchText: String? = null
@@ -40,11 +41,12 @@ class FragmentViewModel(
                 is UiState.Loading -> uiState
                 is UiState.Content -> uiState
                 is UiState.Error -> uiState
+                is UiState.Empty -> uiState
             }
         }.stateIn(
             scope = CoroutineScope(Dispatchers.Main + SupervisorJob()),
             started = SharingStarted.Companion.Lazily,
-            initialValue = UiState.Loading
+            initialValue = UiState.Empty
         )
 
     fun observeMediaState(): StateFlow<UiState> = mediatorStateFlow
@@ -60,19 +62,26 @@ class FragmentViewModel(
         }
     }
 
-    private fun processResult(foundTreks: BinInfo?, errorMessage: String?) {
+    private fun processResult(foundBinInfo: BinInfo?, errorMessage: String?) {
         when {
             errorMessage != null -> {
-                if (errorMessage == "${Object.ERROR_CONNECT}") {
+                if (errorMessage == "$ERROR_CONNECT") {
+                    Log.i("LogError -1 ", errorMessage)
+                    renderState(UiState.Error(errorMessage))
+                }else if  (errorMessage == "$SERVER_ERROR_LIMIT"){
+                    Log.i("LogError -2", errorMessage)
+                    renderState(UiState.Error(errorMessage))
+                } else {
+                    Log.i("LogError - 3", errorMessage)
                     renderState(UiState.Error(errorMessage))
                 }
             }
 
             else -> {
-                renderState(UiState.Content(foundTreks))
+                renderState(UiState.Content(foundBinInfo))
                 Log.i(
                     "Log1",
-                    " ${foundTreks?.brand}, ${foundTreks?.prepaid}, ${foundTreks?.type}, ${foundTreks?.bank}, ${foundTreks?.country}${foundTreks?.scheme}${foundTreks?.number}"
+                    " ${foundBinInfo?.brand}, ${foundBinInfo?.prepaid}, ${foundBinInfo?.type}, ${foundBinInfo?.bank}, ${foundBinInfo?.country}${foundBinInfo?.scheme}${foundBinInfo?.number}"
                 )
             }
         }

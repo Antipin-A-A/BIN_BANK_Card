@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Test_BIN_BANK_Card</string>
+    <string name="country">Country \nCurrency</string>
+    <string name="search">search</string>
+    <string name="first_6_numbers">Введите первые 6 цифр карты</string>
+    <string name="bank_nwebsite_ncity_ntelephon">Bank \nWebsite \nCity \nTelephon</string>
+    <string name="n_n_n">- \n- \n- \n-</string>
+    <string name="n">- \n-</string>
+    <string name="type">type</string>
+    <string name="tire">-</string>
+    <string name="history">history</string>
 </resources>

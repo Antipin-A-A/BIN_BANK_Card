@@ -9,18 +9,20 @@ import com.example.test_bin_bank_card.domain.model.NumberInfo
 
 fun BinInfoDto.toDomainModel(): BinInfo {
     return BinInfo(
-        number = this.number ?: NumberInfo(0, false), // дефолтный объект или null-safe значение
-        scheme = this.scheme ?: "unknown",
-        type = this.type ?: "unknown",
-        bank = this.bank ?: BankInfo("", "", "", ""),
-        prepaid = this.prepaid ?: false,
-        country = this.country ?: CountryInfo("", "", "", "", "", 0, 0),
-        brand = this.brand ?: "unknown"
+        bin = this.bin,
+        number = this.number ?: NumberInfo(0, false),
+        scheme = this.scheme ?: "-",
+        type = this.type ?: "-",
+        bank = ConvectorNull.cleanBankInfo(this.bank),
+        prepaid = this.prepaid == false,
+        country = ConvectorNull.cleanCountryInfo(this.country),
+        brand = this.brand ?: "-"
     )
 }
 
 fun BinInfoEntity.toDataModel(): BinInfo {
     return BinInfo(
+        bin = this.bin,
         number = this.number,
         scheme = this.scheme,
         type = this.type,
@@ -34,12 +36,12 @@ fun BinInfoEntity.toDataModel(): BinInfo {
 fun BinInfoDto.toDomainModelEntity(expression: String): BinInfoEntity {
     return BinInfoEntity(
         bin = expression,
-        number = this.number ?: NumberInfo(0, false), // дефолтный объект или null-safe значение
-        scheme = this.scheme ?: "unknown",
-        type = this.type ?: "unknown",
-        bank = this.bank ?: BankInfo("", "", "", ""),
+        number = this.number ?: NumberInfo(0, false),
+        scheme = this.scheme ?: "-",
+        type = this.type ?: "-",
+        bank = ConvectorNull.cleanBankInfo(this.bank),
         prepaid = this.prepaid ?: false,
-        country = this.country ?: CountryInfo("", "", "", "", "", 0, 0),
-        brand = this.brand ?: "unknown"
+        country = ConvectorNull.cleanCountryInfo(this.country),
+        brand = this.brand ?: "-"
     )
 }

@@ -4,17 +4,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.test_bin_bank_card.databinding.ItemAdapterBinding
 import com.example.test_bin_bank_card.domain.model.BinInfo
 
-class BinInfoViewHolder( private val binding: ItemAdapterBinding,) : RecyclerView.ViewHolder(binding.root) {
-
+class BinInfoViewHolder(private val binding: ItemAdapterBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(binInfo: BinInfo) {
-        val value = binInfo.scheme
         binding.apply {
-            countryInfo.text ="${binInfo?.country?.name}, ${binInfo?.country?.currency}\n${binInfo?.country?.latitude}\n${binInfo?.country?.longitude}"
-            bankName.text ="${binInfo?.bank?.name}" +
-                    "\n city - ${binInfo?.bank?.city}" +
-                    "\n number -${binInfo?.bank?.phone}"
-            bankType.text = "${binInfo?.scheme}/${binInfo?.type}"
-            countryName.text = binInfo?.country?.name
+            binInfoText.text = binInfo.bin
+            countryInfo.text = "${binInfo?.country?.name}\n${binInfo?.country?.currency}"
+            bankInfo.text = "${binInfo?.bank?.name}" +
+                    "\n${binInfo?.bank?.city}" +
+                    "\n${binInfo?.bank?.phone}"
+            typeCardInfo.text = "${binInfo?.scheme}/${binInfo?.type}"
         }
     }
 }
